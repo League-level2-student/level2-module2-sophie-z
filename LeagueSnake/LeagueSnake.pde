@@ -57,8 +57,11 @@ void dropFood() {
 void draw() {
    background(#AF203A);
    drawFood();
+   move();
    drawSnake();
    eat();
+   print(tail.size());
+   checkBoundaries();
 }
 
 void drawFood() {
@@ -71,6 +74,7 @@ void drawSnake() {
   //Draw the head of the snake followed by its tail
   fill(#6A00B7);
   rect(head.snakeX, head.snakeY, 10, 10);
+  manageTail();
 }
 
 
@@ -98,7 +102,13 @@ void manageTail() {
 
 void checkTailCollision() {
   //If the snake crosses its own tail, shrink the tail back to one segment
-  
+  for(int i = 0; i<tail.size(); i++){
+  if(tail.get(i).snakeX == head.snakeX && tail.get(i).snakeY == head.snakeY){
+  tail = new ArrayList <Segment>();
+  foodeaten = 0;
+  }
+  }
+    
 }
 
 
@@ -110,24 +120,20 @@ void checkTailCollision() {
 
 void keyPressed() {
   //Set the direction of the snake according to the arrow keys pressed
-  if(keyCode == UP){
+  if(keyCode == UP && direction != DOWN){
     direction = UP;
-    move();
     checkBoundaries();
   }
-  else if(keyCode == DOWN){
+  else if(keyCode == DOWN && direction != UP){
     direction = DOWN;
-    move();
     checkBoundaries();
   }
-  else if(keyCode == RIGHT){
+  else if(keyCode == RIGHT && direction != LEFT){
     direction = RIGHT;
-    move();
     checkBoundaries();
   }
-  else if(keyCode == LEFT){
+  else if(keyCode == LEFT && direction != RIGHT){
     direction = LEFT;
-    move();
     checkBoundaries();
   }
   else{
@@ -162,20 +168,20 @@ void move() {
 
 void checkBoundaries() {
  //If the snake leaves the frame, make it reappear on the other side
- if(head.snakeX==0){
-  head.snakeX = 500;
+ if(head.snakeX<=0){
+  head.snakeX = 10;
   drawSnake();
  }
- else if(head.snakeX==500){
-   head.snakeX = 0;
+ else if(head.snakeX>=500){
+   head.snakeX = 490;
    drawSnake();
  }
- else if(head.snakeY==0){
-   head.snakeY = 500;
+ else if(head.snakeY<=0){
+   head.snakeY = 490;
    drawSnake();
  }
- else if(head.snakeY==500){
-   head.snakeY = 0;
+ else if(head.snakeY>=500){
+   head.snakeY = 10;
    drawSnake();
  }
  else{
@@ -188,7 +194,7 @@ void eat() {
   //When the snake eats the food, its tail should grow and more food appear
 if(head.snakeX == foodX && head.snakeY == foodY){
   dropFood(); 
-  drawFood();
-   foodeaten = foodeaten + 1;
+  foodeaten = foodeaten + 1;
+  tail.add(new Segment(head.snakeX, head.snakeY));
 }
 }
