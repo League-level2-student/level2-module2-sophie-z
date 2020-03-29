@@ -169,11 +169,11 @@ void move() {
 void checkBoundaries() {
  //If the snake leaves the frame, make it reappear on the other side
  if(head.snakeX<=0){
-  head.snakeX = 10;
+  head.snakeX = 490;
   drawSnake();
  }
  else if(head.snakeX>=500){
-   head.snakeX = 490;
+   head.snakeX = 10;
    drawSnake();
  }
  else if(head.snakeY<=0){
